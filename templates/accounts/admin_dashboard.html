@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Панель администратора — RepairDesk{% endblock %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Панель администратора</h2>
+        <a href="{% url 'core:index' %}" class="btn" style="background: #6b7280;">← На главную</a>
+    </div>
+
+    <p style="color: var(--text-muted); margin-bottom: 30px;">Добро пожаловать, <strong>{{ user.username }}</strong>! Здесь вы можете следить за всеми заявками и работой исполнителей.</p>
+
+    <!-- Блок статистики исполнителей -->
+    <h3 style="margin-top: 30px; border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; display: inline-block;">Статистика исполнителей</h3>
+    <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        {% for exec in executors_stats %}
+            <div class="card" style="text-align: center; padding: 20px;">
+                <p style="font-size: 18px; font-weight: bold; margin-bottom: 5px;">{{ exec.username }}</p>
+                <p style="color: var(--text-muted); margin-bottom: 10px;">{{ exec.email }}</p>
+                <p style="font-size: 24px; color: var(--primary-color); font-weight: bold;">{{ exec.completed_count }}</p>
+                <p style="color: var(--text-muted); font-size: 14px;">выполнено заявок</p>
+            </div>
+        {% empty %}
+            <p style="color: var(--text-muted);">Пока нет исполнителей.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Список всех заявок -->
+    <h3 style="margin-top: 40px; border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; display: inline-block;">Все заявки</h3>
+    
+    {% if not requests %}
+        <div class="card" style="text-align: center; padding: 40px;">
+            <p style="color: var(--text-muted);">Пока нет ни одной заявки.</p>
+        </div>
+    {% else %}
+        <div class="card-grid">
+            {% for req in requests %}
+                <div class="card">
+                    <h3 style="margin-top: 0;">{{ req.category.name|default:"Без категории" }}</h3>
+                    <p><strong>Житель:</strong> {{ req.resident_name }} (комн. {{ req.room }})</p>
+                    <p><strong>Описание:</strong> {{ req.description }}</p>
+                    <p><strong>Статус:</strong> 
+                        <span style="background: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 4px;">{{ req.get_status_display }}</span>
+                    </p>
+                    <p><strong>Исполнитель:</strong> 
+                        {% if req.executor %}
+                            <span style="color: #16a34a; font-weight: bold;">{{ req.executor.username }}</span>
+                        {% else %}
+                            <span style="color: #ef4444;">Не назначен</span>
+                        {% endif %}
+                    </p>
+                    <p style="font-size: 12px; color: var(--text-muted);">Создана: {{ req.created_at|date:"d.m.Y H:i" }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

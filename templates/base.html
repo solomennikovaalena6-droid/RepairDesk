@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}RepairDesk{% endblock %}</title>
+    <!-- Подключаем шрифт Montserrat для стиля -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <div class="header-inner">
+            <a href="/" class="logo">RepairDesk</a>
+            <nav>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}">Личный кабинет</a>
+                    <a href="{% url 'core:agent_page' %}">ИИ-помощник</a>
+                    {% if user.role == 'admin' %}
+                    <a href="/admin/" target="_blank">Админка Django</a>
+                    {% endif %}
+                    <a href="{% url 'logout' %}">Выйти</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Вход</a>
+                    <a href="{% url 'register' %}" class="btn" style="padding: 8px 16px;">Регистрация</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% block content %}
+        <!-- Сюда будут вставляться страницы -->
+        {% endblock %}
+                <!-- Кнопка Назад -->
+        {% if request.path != '/' %}
+            <div style="margin-bottom: 20px;">
+                <a href="{% url 'core:index' %}" style="color: var(--text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
+                    ← Вернуться на главную
+                </a>
+            </div>
+        {% endif %}
+    </main>
+
+    <!-- Подвал -->
+    <footer>
+        <p>&copy; 2026 RepairDesk. Учебный проект. Все права защищены.</p>
+    </footer>
+    <script>
+    // Проверяем, сохранена ли тема в браузере
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-theme');
+    }
+    function toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+        if (document.body.classList.contains('dark-theme')) {
+            localStorage.setItem('theme', 'dark');
+        } else {
+            localStorage.setItem('theme', 'light');
+        }
+    }
+</script>
+</body>
+</html>

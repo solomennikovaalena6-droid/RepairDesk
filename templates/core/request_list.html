@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Заявки — RepairDesk{% endblock %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>
+            {% if user.role == 'resident' %}
+                Мои заявки
+            {% elif user.role == 'executor' %}
+                Заявки в работе
+            {% else %}
+                Все заявки
+            {% endif %}
+        </h2>
+        <a href="{% url 'core:index' %}" class="btn" style="background: #6b7280;">← На главную</a>
+    </div>
+
+    {% if not requests %}
+        <div class="card" style="text-align: center; padding: 40px;">
+            <p style="color: var(--text-muted);">Пока нет ни одной заявки.</p>
+        </div>
+    {% else %}
+        <div class="card-grid">
+            {% for req in requests %}
+                <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; min-height: 400px;">
+                    <div>
+                        <h3>{{ req.category.name|default:"Без категории" }}</h3>
+                        <p><strong>Житель:</strong> {{ req.resident_name }} (комн. {{ req.room }}, эт. {{ req.floor }})</p>
+                        <p><strong>Телефон:</strong> {{ req.phone }}</p>
+                        <p><strong>Описание:</strong> {{ req.description }}</p>
+                        <p><strong>Статус:</strong> 
+                            <span style="background: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 4px;">
+                                {{ req.get_status_display }}
+                            </span>
+                        </p>
+                        <p style="font-size: 12px; color: var(--text-muted);">Создана: {{ req.created_at|date:"d.m.Y H:i" }}</p>
+                        
+                        {% if req.executor %}
+                            <p><strong>Исполнитель:</strong> {{ req.executor.username }}</p>
+                        {% endif %}
+                    </div>
+
+                    {% if user.role == 'executor' %}
+                        <div style="margin-top: 15px;">
+                            {% if req.status == 'new' %}
+                               <a href="{% url 'core:take_request' req.id %}" class="btn" style="display: inline-block; padding: 8px 15px; font-size: 14px; background: #f59e0b;">Приступить к работе</a>
+                            
+                            {% elif req.status == 'in_progress' and req.executor == user %}
+                               <a href="{% url 'core:complete_request' req.id %}" class="btn" style="display: inline-block; padding: 8px 15px; font-size: 14px; background: #16a34a;">Завершить работу</a>
+                            
+                            {% elif req.status == 'done' and req.executor == user %}
+                                <p style="text-align: center; color: #16a34a; font-weight: bold; margin: 0;">✔ Выполнено</p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

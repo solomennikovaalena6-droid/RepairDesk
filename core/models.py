@@ -10,12 +10,17 @@ class Category(models.Model):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
+    def __str__(self):
+        return self.name
+
 
 class Request(models.Model):
+    # 1. Константы для статусов (должны быть ВНУТРИ класса)
     STATUS_NEW = 'new'
     STATUS_IN_PROGRESS = 'in_progress'
     STATUS_DONE = 'done'
     STATUS_CANCELLED = 'cancelled'
+    
     STATUS_CHOICES = [
         (STATUS_NEW, 'Новая'),
         (STATUS_IN_PROGRESS, 'В работе'),
@@ -23,6 +28,11 @@ class Request(models.Model):
         (STATUS_CANCELLED, 'Отклонена'),
     ]
 
+    # 2. Поля заявки
+    resident_name = models.CharField('Имя жителя', max_length=100, default='')
+    phone = models.CharField('Телефон', max_length=20, default='')
+    floor = models.CharField('Этаж', max_length=10, default='')
+    
     resident = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -55,6 +65,9 @@ class Request(models.Model):
         ordering = ['-created_at']
         verbose_name = 'Заявка'
         verbose_name_plural = 'Заявки'
+
+    def __str__(self):
+        return f'Заявка {self.id} - {self.room}'
 
 
 class Comment(models.Model):
@@ -91,24 +104,16 @@ class AIHelper(models.Model):
         verbose_name_plural = 'ИИ-подсказки'
 
 
-class PasswordResetToken(models.Model):
+class AIMessage(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='reset_tokens',
+        related_name='ai_messages',
     )
-    token_hash = models.CharField(max_length=64, unique=True)
-    expires_at = models.DateTimeField()
-    used_at = models.DateTimeField(null=True, blank=True)
+    role = models.CharField(max_length=20)
+    content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'password_reset_token'
-        indexes = [
-            models.Index(fields=['user']),
-            models.Index(fields=['expires_at']),
-        ]
-
-    def is_valid(self):
-        from django.utils import timezone
-        return self.used_at is None and self.expires_at > timezone.now()
+        db_table = 'ai_messages'
+        ordering = ['created_at']

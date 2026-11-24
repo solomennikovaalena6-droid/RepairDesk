@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}ИИ-помощник{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <h2>ИИ-помощник</h2>
+    <div id="chat-box" style="background: #f4f5f7; padding: 20px; border-radius: 10px; height: 400px; overflow-y: auto; margin-bottom: 20px;">
+        {% for msg in history %}
+            <div style="margin-bottom: 10px; text-align: {% if msg.role == 'user' %}right{% else %}left{% endif %};">
+                <span style="display: inline-block; padding: 10px; border-radius: 10px; background: {% if msg.role == 'user' %}#5c8df6{% else %}#e5e7eb{% endif %}; color: {% if msg.role == 'user' %}#fff{% else %}#000{% endif %};">
+                    {{ msg.content }}
+                </span>
+            </div>
+        {% endfor %}
+    </div>
+    <form id="chat-form" style="display: flex; gap: 10px;">
+        {% csrf_token %}
+        <input type="text" id="msg-input" placeholder="Задайте вопрос..." style="flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ccc;">
+        <button type="submit" class="btn">Отправить</button>
+    </form>
+</div>
+
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('msg-input');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const text = input.value.trim();
+        if (!text) return;
+
+        // Добавляем сообщение пользователя на экран
+        const userMsg = document.createElement('div');
+        userMsg.style.textAlign = 'right';
+        userMsg.style.marginBottom = '10px';
+        userMsg.innerHTML = `<span style="display: inline-block; padding: 10px; border-radius: 10px; background: #5c8df6; color: #fff;">${text}</span>`;
+        chatBox.appendChild(userMsg);
+        input.value = '';
+
+        // Заглушка "печатает..."
+        const typingMsg = document.createElement('div');
+        typingMsg.style.marginBottom = '10px';
+        typingMsg.innerHTML = `<span style="display: inline-block; padding: 10px; border-radius: 10px; background: #e5e7eb;">...</span>`;
+        chatBox.appendChild(typingMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        try {
+            const response = await fetch('/agent/send/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ message: text })
+            });
+            const data = await response.json();
+            typingMsg.remove();
+
+            if (data.reply) {
+                const botMsg = document.createElement('div');
+                botMsg.style.marginBottom = '10px';
+                botMsg.innerHTML = `<span style="display: inline-block; padding: 10px; border-radius: 10px; background: #e5e7eb;">${data.reply}</span>`;
+                chatBox.appendChild(botMsg);
+            } else {
+                alert(data.error || 'Ошибка');
+            }
+        } catch (err) {
+            typingMsg.remove();
+            alert('Ошибка сети');
+        }
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+</script>
+{% endblock %}

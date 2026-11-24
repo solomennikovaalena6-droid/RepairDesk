@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+    <h2>Личный кабинет</h2>
+    
+    <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <p><strong>Вы вошли как:</strong> {{ user.username }}</p>
+        <p><strong>Ваша роль:</strong> {{ user.get_role_display }}</p>
+        <p><strong>Ваша почта:</strong> {{ user.email }}</p>
+
+{% if user.role == 'executor' %}
+    <p style="color: var(--primary-color); font-weight: bold;">Выполнено заявок: {{ completed_count }}</p> 
+{% endif %}
+
+        <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border-color);">
+        
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+            <button onclick="toggleTheme()" class="btn" style="background: #4b5563;">Сменить тему (День/Ночь)</button>
+            <a href="{% url 'logout' %}" class="btn btn-danger" style="text-align: center;">Выйти</a>
+        </div>
+    </div>
+{% endblock %}

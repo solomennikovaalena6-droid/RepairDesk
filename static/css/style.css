@@ -1,0 +1,335 @@
+/* --- ЦВЕТОВАЯ ПАЛИТРА И ШРИФТЫ --- */
+:root {
+    --primary-color: #5c8df6; /* Нежно-голубой акцент */
+    --primary-hover: #4a7ae0;
+    --dark-bg: #333333; /* Графитовый цвет для шапки */
+    --light-bg: #f4f5f7; /* Светло-серый фон */
+    --white: #ffffff;
+    --text-main: #1a1a1a;
+    --text-muted: #6b7280;
+    --border-color: #e5e7eb;
+    --border-radius: 12px;
+    --font-main: 'Montserrat', 'Inter', sans-serif;
+}
+
+/* --- БАЗОВЫЕ СТИЛИ --- */
+body {
+    font-family: var(--font-main);
+    color: var(--text-main);
+    background-color: var(--light-bg);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* --- ШАПКА САЙТА --- */
+header {
+    background-color: var(--dark-bg);
+    color: var(--white);
+    padding: 20px 0;
+}
+
+.header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+}
+
+nav a {
+    color: #cccccc;
+    text-decoration: none;
+    margin-left: 25px;
+    font-size: 15px;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: var(--primary-color);
+}
+
+/* --- ТИПОГРАФИКА --- */
+h1, h2, h3 {
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    color: var(--dark-bg);
+}
+
+h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    line-height: 1.1;
+}
+
+h2 {
+    font-size: 32px;
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary-color);
+    display: inline-block;
+}
+
+/* --- КАРТОЧКИ --- */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.card {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s;
+    border: 1px solid transparent;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-color: #dbeafe;
+}
+
+.card h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    font-size: 22px;
+}
+
+/* --- КНОПКИ --- */
+.btn {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 12px 28px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background 0.3s ease, transform 0.2s;
+}
+
+.btn:hover {
+    background-color: var(--primary-hover);
+    transform: scale(1.02);
+}
+
+.btn-danger {
+    background-color: #ef4444;
+}
+
+/* --- ФОРМЫ --- */
+form {
+    background: var(--white);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    max-width: 500px;
+    margin: 0 auto;
+    transition: background-color 0.3s;
+}
+
+form p {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-family: var(--font-main);
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+    background-color: #fafafa;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    background-color: var(--white);
+}
+
+/* --- СООБЩЕНИЯ --- */
+.messages {
+    list-style: none;
+    padding: 0;
+}
+
+.messages li {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background: #e0f2fe;
+    color: #0369a1;
+    border-left: 4px solid var(--primary-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.errorlist {
+    color: #ef4444;
+    font-size: 14px;
+    margin-top: 5px;
+    padding-left: 0;
+    list-style: none;
+}
+
+/* --- ПОДВАЛ --- */
+footer {
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 60px;
+    color: var(--text-muted);
+    font-size: 14px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* =========================================
+   НОЧНАЯ ТЕМА (Все стили в одном месте)
+   ========================================= */
+body.dark-theme {
+    --light-bg: #1a1a1a;
+    --white: #2d2d2d;
+    --text-main: #f4f5f7;
+    --text-muted: #9ca3af;
+    --dark-bg: #111111;
+    --border-color: #404040;
+}
+
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3 {
+    color: #ffffff;
+}
+
+body.dark-theme p,
+body.dark-theme span,
+body.dark-theme label {
+    color: var(--text-main);
+}
+
+body.dark-theme a {
+    color: var(--primary-color);
+}
+
+body.dark-theme .card {
+    background-color: #2d2d2d;
+    border-color: #404040;
+}
+
+body.dark-theme input, 
+body.dark-theme select, 
+body.dark-theme textarea {
+    background-color: #404040;
+    color: #ffffff;
+    border-color: #555555;
+}
+
+body.dark-theme .messages li {
+    background: #1e3a8a;
+    color: #bfdbfe;
+    border-left-color: var(--primary-color);
+}
+
+/* =========================================
+   АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ
+   ========================================= */
+@media (max-width: 1024px) {
+    .container { padding: 30px 20px; }
+    .card-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+}
+
+@media (max-width: 768px) {
+    .header-inner { flex-direction: column; gap: 15px; text-align: center; }
+    nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    nav a { margin: 0; font-size: 14px; }
+    h1 { font-size: 28px !important; }
+    h2 { font-size: 24px; }
+    .card-grid { grid-template-columns: 1fr; }
+    .btn { width: 100%; text-align: center; margin-bottom: 15px; }
+    div[style*="text-align: center"] { padding: 30px 15px !important; }
+}
+/* =========================================
+   ПРИНУДИТЕЛЬНЫЕ СТИЛИ ДЛЯ НОЧНОЙ ТЕМЫ
+   ========================================= */
+
+body.dark-theme,
+body.dark-theme * {
+    /* Принудительно меняем цвет текста на белый для всего */
+    color: #ffffff !important; 
+}
+
+/* Заголовки делаем ярко-белыми */
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4 {
+    color: #ffffff !important;
+}
+
+/* Карточки делаем темно-серыми с четкой рамкой */
+body.dark-theme .card,
+body.dark-theme form {
+    background-color: #2d2d2d !important;
+    border: 1px solid #555555 !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+}
+
+/* Обычный текст (параграфы, спаны) делаем светло-серым */
+body.dark-theme p,
+body.dark-theme span:not(.btn) {
+    color: #d1d5db !important;
+}
+
+/* Ссылки делаем голубыми */
+body.dark-theme a:not(.btn) {
+    color: var(--primary-color) !important;
+}
+
+/* Поля ввода делаем темными */
+body.dark-theme input,
+body.dark-theme select,
+body.dark-theme textarea {
+    background-color: #404040 !important;
+    color: #ffffff !important;
+    border: 1px solid #555555 !important;
+}
+
+/* Сообщения (например, "Вы вошли в систему") */
+body.dark-theme .messages li {
+    background: #1e3a8a !important;
+    color: #bfdbfe !important;
+    border-left: 4px solid var(--primary-color) !important;
+}

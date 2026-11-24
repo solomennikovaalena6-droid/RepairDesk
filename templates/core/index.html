@@ -1,12 +1,44 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>RepairDesk</title>
-</head>
-<body>
-    <h1>Проект RepairDesk запущен!</h1>
-    <p>Каркас приложения настроен.</p>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Главная — RepairDesk{% endblock %}
+
+{% block content %}
+        <!-- Главный баннер с картинкой -->
+    <div style="position: relative; border-radius: var(--border-radius); overflow: hidden; margin-bottom: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+        <!-- Сама картинка (фон) -->
+        <img src="/static/img/hero-bg.jpg" alt="Уютный интерьер" style="width: 100%; height: 500px; object-fit: cover; display: block;">
+        
+        <!-- Затемнение и текст поверх картинки -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px;">
+            <h1 style="color: #ffffff; margin-bottom: 15px; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">Управляйте ремонтом<br>в вашем общежитии</h1>
+            <p style="color: #ffffff; font-size: 18px; max-width: 600px; margin-bottom: 30px; text-shadow: 0 1px 5px rgba(0,0,0,0.5);">Современный сервис для подачи и обработки заявок.</p>
+            
+            {% if user.is_authenticated %}
+                {% if user.role == 'resident' %}
+                    <a href="{% url 'core:create_request' %}" class="btn" style="font-size: 18px; padding: 15px 40px;">Оставить заявку</a>
+                {% elif user.role == 'executor' %}
+                    <a href="{% url 'core:request_list' %}" class="btn" style="font-size: 18px; padding: 15px 40px;">Текущие заявки</a>
+                {% else %}
+                    <a href="{% url 'admin_dashboard' %}" class="btn" style="font-size: 18px; padding: 15px 40px;">Панель администратора</a>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'register' %}" class="btn" style="font-size: 18px; padding: 15px 40px;">Начать работу</a>
+            {% endif %}
+        </div>
+    </div>
+    
+       <h2>Почему выбирают нас?</h2>
+    <div class="card-grid">
+        <div class="card">
+            <h3>Прозрачность</h3>
+            <p style="color: var(--text-muted);">Забудьте о потерянных заявках. Вы всегда видите статус ремонта в реальном времени: от «Новая» до «Выполнена».</p>
+        </div>
+        <div class="card">
+            <h3>Скорость</h3>
+            <p style="color: var(--text-muted);">Ваша заявка моментально попадает к нужному исполнителю. Мы не тратим время на бумажную волокиту.</p>
+        </div>
+        <div class="card">
+            <h3>Ответственность</h3>
+            <p style="color: var(--text-muted);">Вы всегда знаете, кто именно отвечает за ваш ремонт. В карточке заявки указано имя исполнителя.</p>
+        </div>
+    </div>
+{% endblock %}
